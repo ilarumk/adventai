@@ -51,7 +51,7 @@ export default function Home() {
           >
             <div className="w-1/2">
               <h2 className="flex items-center font-semibold text-[1em] text-[#1a2b3b]">
-                Puzzles
+                Puzzles, Analogies, Math
               </h2>
               <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal">
                 Quick puzzles to test your brain and solutions
@@ -59,10 +59,10 @@ export default function Home() {
             </div>
             <div className="w-1/2">
               <h2 className="flex items-center font-semibold text-[1em] text-[#1a2b3b]">
-                Math and Other
+                American Politics, World Politics, Sports
               </h2>
               <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal">
-                Test math skills and learn continously
+                Test your knowledge about American history, politics, sports
               </p>
             </div>
           </motion.div>

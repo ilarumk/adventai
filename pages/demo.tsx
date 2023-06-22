@@ -10,14 +10,108 @@ const questions = [
   {
     id: 1,
     name: "Puzzles",
-    description: "Puzzles, Brainteasers",
-    difficulty: "Easy",
+    description: "Puzzles and Brain teasers",
+    difficulty: "Medium",
+    topics : [
+      {
+        id: "puzzles",
+        name: "Puzzles",
+        description: "puzzles",
+        level: "L7",
+      },
+      {
+        id: "brainteasers",
+        name: "Brain teasers",
+        description: "Brain teasers",
+        level: "L7",
+      },
+    ]
   },
   {
     id: 2,
-    name: "Analogies",
-    description: "mathematical and verbal",
+    name: "Mathematical",
+    description: "Mathematical",
     difficulty: "Medium",
+    topics : [
+      {
+        id: "quantitative",
+        name: "Quantitative reasoning",
+        description: "quantitative reasoning using mathematics and information to solve real world problems",
+        level: "L5",
+      },
+      {
+        id: "logical",
+        name: "Logical",
+        description: "Logical",
+        level: "L7",
+      },
+      {
+        id: "statistical",
+        name: "Statistical",
+        description: "Statistical skills to interpret data and produce new informaton",
+        level: "L7",
+      }
+    ]
+  },
+  {
+    id: 3,
+    name: "Politics",
+    description: "America",
+    difficulty: "Medium",
+    topics : [
+      {
+        id: "history",
+        name: "American history",
+        description: "questions related to american History ranging from 1800s to now",
+        level: "L5",
+      },
+      {
+        id: "politics",
+        name: "Politics",
+        description: "American Politics from beginning of independence to now",
+        level: "L7",
+      }
+    ]
+  },
+  {
+    id: 4,
+    name: "Sports",
+    description: "Sports",
+    difficulty: "Medium",
+    topics : [
+      {
+        id: "baseball",
+        name: "Baseball",
+        description: "Baseball game, history",
+        level: "L5",
+      },
+      {
+        id: "soccer",
+        name: "Soccer",
+        description: "Soccer game, history",
+        level: "L7",
+      }
+    ]
+  },
+  {
+    id: 4,
+    name: "Science",
+    description: "Science and Geography",
+    difficulty: "Medium",
+    topics : [
+      {
+        id: "science",
+        name: "Science",
+        description: "Scientific inventions, science related",
+        level: "L5",
+      },
+      {
+        id: "geography",
+        name: "Geography",
+        description: "Geography",
+        level: "L7",
+      }
+    ]
   },
 ];
 
@@ -56,7 +150,7 @@ function classNames(...classes: string[]) {
 export default function DemoPage() {
   const [selected, setSelected] = useState(questions[0]);
   const [selectedTopic, setselectedTopic] = useState(
-    topics[0]
+    selected.topics ? selected.topics[0] : topics[0]
   );
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -149,7 +243,7 @@ const resetThisanswer = () => {
       // setAnswer("...");
       setAnswerSubmitted(false)
       setGeneratedFeedback("")
-      let prompt = "Generate a " + selected.name + " question related to " + selectedTopic.name
+      let prompt = "Generate only one question on " + selected.name + " with topics " + selectedTopic.name + " and don't provide the answer"
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
@@ -196,7 +290,6 @@ const resetThisanswer = () => {
 
   const answerQuestion = async () => {
 
-    // var question = "there are 10 bells for $5 each, how many bells can you buy"
     var question  = null
     if (generatedQuestion) {     
       question = generatedQuestion
@@ -261,8 +354,8 @@ const resetThisanswer = () => {
                       : selectedTopic.name === "Algebra"
                       ? "Algebra question"
                       : selectedTopic.name === "Geometry"
-                      ? "Question 1"
-                      : "Question 2"}
+                      ? "Question"
+                      : "Question"}
                   </h2>
                   <span className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal mb-4">
                     {generatedQuestion && (
@@ -563,7 +656,7 @@ const resetThisanswer = () => {
                         Server size
                       </RadioGroup.Label>
                       <div className="space-y-4">
-                        {topics.map((topic) => (
+                        {selected.topics.map((topic) => (
                           <RadioGroup.Option
                             key={topic.name}
                             value={topic}
