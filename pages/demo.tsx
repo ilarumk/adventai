@@ -10,30 +10,36 @@ const questions = [
   {
     id: 1,
     name: "Puzzles",
-    description: "Answers puzzles",
+    description: "Puzzles, Brainteasers",
     difficulty: "Easy",
   },
   {
     id: 2,
-    name: "Math",
-    description: "Answer math questions based on your grade",
+    name: "Analogies",
+    description: "mathematical and verbal",
     difficulty: "Medium",
   },
 ];
 
 const topics = [
   {
-    id: "algebra",
-    name: "Algebra",
-    description: "questions related to algebra",
+    id: "mathemetical",
+    name: "Mathemetical",
+    description: "Mathemetical",
+    level: "L7",
+  },
+  {
+    id: "quantitative",
+    name: "Quantitative reasoning",
+    description: "questions related to brain teasers",
     level: "L5",
   },
   {
-    id: "geometry",
-    name: "Geometry",
-    description: "Geometry and shapes",
+    id: "logical",
+    name: "Logical",
+    description: "Logical",
     level: "L7",
-  },
+  }
 ];
 
 // const ffmpeg = createFFmpeg({
@@ -87,9 +93,11 @@ export default function DemoPage() {
     if (isSending) return
 
     setIsSending(true)
-    setAnswerSubmitted(true)
+    setGeneratedFeedback("... checking your answer")
+    // setAnswerSubmitted(true)
     // setAnswer("")
     console.log("setting answer submit")
+    console.log(thisanswer)
     
     // console.log(answer);
     if (thisanswer) {
@@ -98,41 +106,33 @@ export default function DemoPage() {
     }
 
     if (answerSubmitted) {
-      console.log("answer.....")
       console.log(thisanswer)
       // answerQuestion
     } 
     setIsSending(false)
     // setAnswerSubmitted(false)
-  }, [isSending, answerSubmitted, setAnswer]);
+  }, [isSending, answerSubmitted]);
 
-  const xsendRequest = useCallback(() => {
-
-    if (isSending) return
-
-    setIsSending(true)
-    setAnswerSubmitted(true)
-    // setAnswer("")
-    console.log("setting answer submit")
-    
-    // console.log(answer);
-    if (thisanswer) {
-      // setAnswer(answer)
-      answerQuestion();
+  
+  const handleAnswerChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (event.target.value !== undefined || event.target.value !== "") {
+      setAnswer(event.target.value);
+      console.log(event.target.value);
+      setAnswerSubmitted(true)
     }
 
-    if (answerSubmitted) {
-      console.log("answer.....")
-      console.log(thisanswer)
-      // answerQuestion
-    } 
-    setIsSending(false)
-    // setAnswerSubmitted(false)
-  }, [isSending, answerSubmitted, setAnswer]);
+  };
+
+
+// onChange={(e) => setAnswer(e.target.value)}
 
 
   const generateQuestion = async () => {
-      let prompt = "Generate a 5th grade " + selected.name + " question related to " + selectedTopic.name
+      setGeneratedQuestion("generating a question ...")
+      setAnswer("...");
+      setAnswerSubmitted(false)
+      setGeneratedFeedback("")
+      let prompt = "Generate a " + selected.name + " question related to " + selectedTopic.name
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
@@ -245,7 +245,7 @@ export default function DemoPage() {
                     )}
 
                   </span>
-                  <textarea id="answer" name="answer" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your answer..." onChange={(e) => setAnswer(e.target.value)}></textarea>
+                  <textarea id="answer" name="answer" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your answer..." onChange={handleAnswerChange}></textarea>
 
 
                   <div>
