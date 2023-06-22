@@ -93,19 +93,24 @@ export default function DemoPage() {
     if (isSending) return
 
     setIsSending(true)
-    setGeneratedFeedback("... checking your answer")
+    // setGeneratedFeedback("... checking your answer")
     // setAnswerSubmitted(true)
     // setAnswer("")
     console.log("setting answer submit")
     console.log(thisanswer)
+    setGeneratedFeedback("")
     
     // console.log(answer);
     if (thisanswer) {
       // setAnswer(answer)
+
       answerQuestion();
+      resetThisanswer();
     }
+    
 
     if (answerSubmitted) {
+
       console.log(thisanswer)
       // answerQuestion
     } 
@@ -115,21 +120,33 @@ export default function DemoPage() {
 
   
   const handleAnswerChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (event.target.value !== undefined || event.target.value !== "") {
-      setAnswer(event.target.value);
-      console.log(event.target.value);
+    // if (event.target.value !== undefined || event.target.value !== "") {
       setAnswerSubmitted(true)
-    }
+      // const { value } = event.target as unknown as { value: string };
+      // console.log("setting " + event.target.value)
+      // setAnswer(value);
+      setAnswer(event.target.value)
+      
+      // if (thisanswer) {
+      //   console.log("MMMM " + thisanswer)
+      // }
+      // console.log(event.target.value);
+      
+    // }
 
   };
 
+const resetThisanswer = () => {
+  setAnswer("");
+  setAnswerSubmitted(false)
+}
 
 // onChange={(e) => setAnswer(e.target.value)}
 
 
   const generateQuestion = async () => {
-      setGeneratedQuestion("generating a question ...")
-      setAnswer("...");
+      // setGeneratedQuestion("generating a question ...")
+      // setAnswer("...");
       setAnswerSubmitted(false)
       setGeneratedFeedback("")
       let prompt = "Generate a " + selected.name + " question related to " + selectedTopic.name
@@ -158,15 +175,24 @@ export default function DemoPage() {
       const decoder = new TextDecoder();
       let done = false;
       while (!done) {
+        // setGeneratedQuestion("")
         const { value, done: doneReading } = await reader.read();
         done = doneReading;
         const chunkValue = decoder.decode(value); 
-        // setGeneratedFeedback((prev: any) => prev + chunkValue);
-        if (chunkValue !== '') {
-          setGeneratedQuestion(chunkValue);
-        }
+        setGeneratedQuestion((prev: any) => prev + chunkValue);
+        // if (chunkValue !== '') {
+        //   setGeneratedQuestion(chunkValue);
+        // }
       }
     }
+
+  function restart() {
+    setGeneratedQuestion("")
+    setAnswer("")
+    setGeneratedFeedback("")
+    setAnswerSubmitted(false)
+    setStep(1)
+  }
 
   const answerQuestion = async () => {
 
@@ -213,11 +239,12 @@ export default function DemoPage() {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value); 
-      // setGeneratedFeedback((prev: any) => prev + chunkValue);
-      if (chunkValue !== '') {
-        setGeneratedFeedback(chunkValue);
-      }
+      setGeneratedFeedback((prev: any) => prev + chunkValue);
+      // if (chunkValue !== '') {
+      //   setGeneratedFeedback(chunkValue);
+      // }
     }
+    setAnswer("")
 
   }
 
@@ -245,7 +272,7 @@ export default function DemoPage() {
                     )}
 
                   </span>
-                  <textarea id="answer" name="answer" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your answer..." onChange={handleAnswerChange}></textarea>
+                  <textarea id="answer" name="answer" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your answer..."   onBlur={handleAnswerChange}></textarea>
 
 
                   <div>
@@ -292,7 +319,7 @@ export default function DemoPage() {
               
                   <div className="flex flex-row space-x-4 mt-8 justify-end">
                     <button
-                      onClick={() => setStep(1)}
+                      onClick={() => restart()}
                       className="group max-w-[200px] rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#f5f7f9] text-[#1E2B3A] no-underline active:scale-95 scale-100 duration-75"
                       style={{
                         boxShadow: "0 1px 1px #0c192714, 0 1px 3px #0c192724",
