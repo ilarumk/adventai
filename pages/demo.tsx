@@ -15,7 +15,7 @@ const questions = [
     topics : [
       {
         id: "puzzles",
-        name: "Puzzles",
+        name: "Logic Puzzles",
         description: "puzzles",
         level: "L7",
       },
@@ -25,6 +25,12 @@ const questions = [
         description: "Brain teasers",
         level: "L7",
       },
+      {
+        id: "brainteasers",
+        name: "Word Games",
+        description: "Word Games",
+        level: "L7",
+      }
     ]
   },
   {
@@ -34,15 +40,21 @@ const questions = [
     difficulty: "Medium",
     topics : [
       {
-        id: "quantitative",
-        name: "Quantitative reasoning",
-        description: "quantitative reasoning using mathematics and information to solve real world problems",
-        level: "L5",
+        id: "geometry",
+        name: "Geometry",
+        description: "Geometry",
+        level: "L7",
       },
       {
-        id: "logical",
-        name: "Logical",
-        description: "Logical",
+        id: "arithemetic",
+        name: "Arithemetic",
+        description: "Arithemetic",
+        level: "L7",
+      },
+      {
+        id: "algebra",
+        name: "Algebra",
+        description: "Algebra",
         level: "L7",
       },
       {
@@ -102,7 +114,13 @@ const questions = [
       {
         id: "science",
         name: "Science",
-        description: "Scientific inventions, science related",
+        description: "science related",
+        level: "L5",
+      },
+      {
+        id: "inventions",
+        name: "Inventions",
+        description: "Inventions",
         level: "L5",
       },
       {
@@ -243,7 +261,8 @@ const resetThisanswer = () => {
       // setAnswer("...");
       setAnswerSubmitted(false)
       setGeneratedFeedback("")
-      let prompt = "Generate only one question on " + selected.name + " with topics " + selectedTopic.name + " and don't provide the answer"
+      // let prompt = "Generate one question on " + selected.name + " with topics " + selectedTopic.name + " and don't provide the answer. Provide the output in content-type JSON format, don't write normal text"
+      let prompt = "Generate one question on " + selected.name + " with topic: " + selectedTopic.name + " "
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
@@ -261,7 +280,8 @@ const resetThisanswer = () => {
 
       // This data is a ReadableStream
       const data = response.body;
-    
+      
+
       if (!data) {
         return;
       }
